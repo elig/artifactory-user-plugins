@@ -15,6 +15,7 @@ class ProxiesConfigTest extends Specification {
         when:
         // get an initial list of proxies
         conn = new URL("$baseurl/getProxiesList").openConnection()
+        conn.setConnectTimeout(10000)
         conn.setRequestProperty('Authorization', auth)
         assert conn.responseCode == 200
         def listreader1 = new InputStreamReader(conn.inputStream)
@@ -30,6 +31,7 @@ class ProxiesConfigTest extends Specification {
             defaultProxy: false,
             redirectedToHosts: 'rehost']
         conn = new URL("$baseurl/addProxy").openConnection()
+        conn.setConnectTimeout(10000)
         conn.doOutput = true
         conn.setRequestProperty('Authorization', auth)
         conn.setRequestProperty('Content-Type', 'application/json')
@@ -38,6 +40,7 @@ class ProxiesConfigTest extends Specification {
         conn.disconnect()
         // get a new proxy list, containing the new proxy
         conn = new URL("$baseurl/getProxiesList").openConnection()
+        conn.setConnectTimeout(10000)
         conn.setRequestProperty('Authorization', auth)
         assert conn.responseCode == 200
         def listreader2 = new InputStreamReader(conn.inputStream)
@@ -46,6 +49,7 @@ class ProxiesConfigTest extends Specification {
         conn.disconnect()
         // get the new proxy data
         conn = new URL("$baseurl/getProxy$params").openConnection()
+        conn.setConnectTimeout(10000)
         conn.setRequestProperty('Authorization', auth)
         assert conn.responseCode == 200
         def reader1r = new InputStreamReader(conn.inputStream)
@@ -64,6 +68,7 @@ class ProxiesConfigTest extends Specification {
         conn.disconnect()
         // get the proxy list again, still containing the new proxy
         conn = new URL("$baseurl/getProxiesList").openConnection()
+        conn.setConnectTimeout(10000)
         conn.setRequestProperty('Authorization', auth)
         assert conn.responseCode == 200
         def listreader2r = new InputStreamReader(conn.inputStream)
@@ -72,6 +77,7 @@ class ProxiesConfigTest extends Specification {
         conn.disconnect()
         // get the modified proxy data
         conn = new URL("$baseurl/getProxy$params").openConnection()
+        conn.setConnectTimeout(10000)
         conn.setRequestProperty('Authorization', auth)
         assert conn.responseCode == 200
         def reader2r = new InputStreamReader(conn.inputStream)
@@ -79,6 +85,7 @@ class ProxiesConfigTest extends Specification {
         conn.disconnect()
         // delete the new proxy
         conn = new URL("$baseurl/deleteProxy$params").openConnection()
+        conn.setConnectTimeout(10000)
         conn.requestMethod = 'DELETE'
         conn.setRequestProperty('Authorization', auth)
         assert conn.responseCode == 200
