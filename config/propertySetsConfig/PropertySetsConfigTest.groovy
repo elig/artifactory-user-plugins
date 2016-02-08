@@ -15,6 +15,7 @@ class PropertySetsConfigTest extends Specification {
         when:
         // get an initial list of property sets
         conn = new URL("$baseurl/getPropertySetsList").openConnection()
+        conn.setConnectTimeout(10000)
         conn.setRequestProperty('Authorization', auth)
         assert conn.responseCode == 200
         def listreader1 = new InputStreamReader(conn.inputStream)
@@ -42,6 +43,7 @@ class PropertySetsConfigTest extends Specification {
             name: 'newpropset',
             properties: props]
         conn = new URL("$baseurl/addPropertySet").openConnection()
+        conn.setConnectTimeout(10000)
         conn.doOutput = true
         conn.setRequestProperty('Authorization', auth)
         conn.setRequestProperty('Content-Type', 'application/json')
@@ -50,6 +52,7 @@ class PropertySetsConfigTest extends Specification {
         conn.disconnect()
         // get a new property set list, containing the new property set
         conn = new URL("$baseurl/getPropertySetsList").openConnection()
+        conn.setConnectTimeout(10000)
         conn.setRequestProperty('Authorization', auth)
         assert conn.responseCode == 200
         def listreader2 = new InputStreamReader(conn.inputStream)
@@ -58,6 +61,7 @@ class PropertySetsConfigTest extends Specification {
         conn.disconnect()
         // get the new property set data
         conn = new URL("$baseurl/getPropertySet$params").openConnection()
+        conn.setConnectTimeout(10000)
         conn.setRequestProperty('Authorization', auth)
         assert conn.responseCode == 200
         def reader1r = new InputStreamReader(conn.inputStream)
@@ -68,6 +72,7 @@ class PropertySetsConfigTest extends Specification {
             properties: [json1['properties'][0]]]
         def json2 = json1 + json2diff
         conn = new URL("$baseurl/updatePropertySet$params").openConnection()
+        conn.setConnectTimeout(10000)
         conn.doOutput = true
         conn.requestMethod = 'POST'
         conn.setRequestProperty('Authorization', auth)
@@ -77,6 +82,7 @@ class PropertySetsConfigTest extends Specification {
         conn.disconnect()
         // get the property set list again, still containing the new set
         conn = new URL("$baseurl/getPropertySetsList").openConnection()
+        conn.setConnectTimeout(10000)
         conn.setRequestProperty('Authorization', auth)
         assert conn.responseCode == 200
         def listreader2r = new InputStreamReader(conn.inputStream)
@@ -85,6 +91,7 @@ class PropertySetsConfigTest extends Specification {
         conn.disconnect()
         // get the modified property set data
         conn = new URL("$baseurl/getPropertySet$params").openConnection()
+        conn.setConnectTimeout(10000)
         conn.setRequestProperty('Authorization', auth)
         assert conn.responseCode == 200
         def reader2r = new InputStreamReader(conn.inputStream)
@@ -92,12 +99,14 @@ class PropertySetsConfigTest extends Specification {
         conn.disconnect()
         // delete the new property set
         conn = new URL("$baseurl/deletePropertySet$params").openConnection()
+        conn.setConnectTimeout(10000)
         conn.requestMethod = 'DELETE'
         conn.setRequestProperty('Authorization', auth)
         assert conn.responseCode == 200
         conn.disconnect()
         // get the property set list again, not containing the new property set
         conn = new URL("$baseurl/getPropertySetsList").openConnection()
+        conn.setConnectTimeout(10000)
         conn.setRequestProperty('Authorization', auth)
         assert conn.responseCode == 200
         def listreader1r = new InputStreamReader(conn.inputStream)
